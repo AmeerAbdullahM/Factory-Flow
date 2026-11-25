@@ -1,3 +1,5 @@
+#Copyright (c) [2026] [Mohamed Abdullah M]. All rights reserved.
+
 # FactoryFlow — Order-to-Audit Management System
 
 FactoryFlow is an Order-to-Audit ERP built for a Tamil Nadu-based South Indian packaged-snack manufacturer (Murukku, Mixture, Chips, Sweets). It connects the **Sales loop** (mobile order → admin verification → GST invoice → dispatch → collections) and the **Production loop** (purchase → raw stock → BOM issue → production run → FG stock → variance & costing) into a single ledger-backed system.
