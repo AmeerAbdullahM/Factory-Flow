@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: factoryflow-backend
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:factoryflow}
+    username: ${DB_USER:factoryflow_user}
+    password: ${DB_PASSWORD:factoryflow_pass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:FactoryFlow-JWT-Secret-Key-2024-Must-Be-At-Least-256-Bits-Long-For-HS256}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}  # 24 hours
+
+  factory:
+    state: Tamil Nadu
+    state-code: "33"
+    gstin: ${FACTORY_GSTIN:33AABCF1234A1Z5}
+
+  variance:
+    tolerance-percent: 3.0
+
+  invoice:
+    prefix: "INV"
+
+logging:
+  level:
+    com.factoryflow: INFO
+    org.springframework.security: WARN
+    org.flywaydb: INFO
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
