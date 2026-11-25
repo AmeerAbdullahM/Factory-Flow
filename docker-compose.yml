@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: factoryflow-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-factoryflow}
+      POSTGRES_USER: ${DB_USER:-factoryflow_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-factoryflow_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-factoryflow_user} -d ${DB_NAME:-factoryflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: factoryflow-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-factoryflow}
+      DB_USER: ${DB_USER:-factoryflow_user}
+      DB_PASSWORD: ${DB_PASSWORD:-factoryflow_pass}
+      JWT_SECRET: ${JWT_SECRET:-FactoryFlow-JWT-Secret-Key-2024-Must-Be-At-Least-256-Bits-Long-For-HS256}
+      FACTORY_GSTIN: ${FACTORY_GSTIN:-33AABCF1234A1Z5}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: factoryflow-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  pgdata:
